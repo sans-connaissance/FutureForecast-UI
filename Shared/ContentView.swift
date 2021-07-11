@@ -10,41 +10,33 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, Color("lightBlue")]),
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            BackgroundView(topColor: .blue, bottomColor: Color("lightBlue"))
             VStack {
-                Text("Ann Arbor, MI")
-                    .font(.system(size: 32, weight: .medium, design: .default))
-                    .foregroundColor(.white)
-                    .padding()
+                
+                CityTextView(cityName: "Ann Arbor, MI")
                 
                 VStack(spacing: 9){
-                    Image(systemName: "cloud.sun.fill")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 180, height: 180)
+                    MainWeatherStatusView(imageName: "cloud.sun.fill", temp: 76)
                     
-                    //hardcoded font
-                    Text("76°")
-                        .font(.system(size: 70, weight: .medium))
-                        .foregroundColor(.white)
+                    HStack(spacing: 20) {
+                        WeatherDayView(dayOfWeek: "TUE", imageName: "cloud.sun.rain.fill", temp: 78)
+                        WeatherDayView(dayOfWeek: "WED", imageName: "cloud.bolt.fill", temp: 32)
+                        WeatherDayView(dayOfWeek: "THUR", imageName: "cloud.sleet.fill", temp: 50)
+                        WeatherDayView(dayOfWeek: "FRI", imageName: "sun.max.fill", temp: 65)
+                        WeatherDayView(dayOfWeek: "SAT", imageName: "cloud.sun.rain.fill", temp: 115)
+                        
+                        
+                    }
+                    Spacer()
+                    Button {
+                        print("tapped")
+                    } label: {
+                        WeatherButton(title: "Change Day Time", textColor: .blue, backgroundColor: .white)
+                    }
+                    
+                    Spacer()
+                    
                 }
-                .padding(.bottom, 40)
-                
-                HStack(spacing: 20) {
-                    WeatherDayView(dayOfWeek: "TUE", imageName: "cloud.sun.rain.fill", temp: 78)
-                    WeatherDayView(dayOfWeek: "WED", imageName: "cloud.bolt.fill", temp: 32)
-                    WeatherDayView(dayOfWeek: "THUR", imageName: "cloud.sleet.fill", temp: 50)
-                    WeatherDayView(dayOfWeek: "FRI", imageName: "sun.max.fill", temp: 65)
-                    WeatherDayView(dayOfWeek: "SAT", imageName: "cloud.sun.rain.fill", temp: 115)
-                    
-                    
-                }
-                Spacer()
-                
             }
         }
     }
@@ -77,3 +69,54 @@ struct WeatherDayView: View {
         }
     }
 }
+
+struct BackgroundView: View {
+    
+    var topColor: Color
+    var bottomColor: Color
+    
+    var body: some View {
+        
+        LinearGradient(gradient: Gradient(colors: [topColor, bottomColor]),
+                       startPoint: .topLeading,
+                       endPoint: .bottomTrailing)
+            .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+    }
+}
+
+
+struct CityTextView: View {
+    var cityName: String
+    
+    var body: some View {
+        Text(cityName)
+            .font(.system(size: 32, weight: .medium, design: .default))
+            .foregroundColor(.white)
+            .padding()
+    }
+}
+
+struct MainWeatherStatusView: View {
+    
+    var imageName: String
+    var temp: Int
+    
+    var body: some View {
+        VStack(spacing: 9){
+            Image(systemName: imageName)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 180, height: 180)
+            
+            //hardcoded font
+            Text("\(temp)°")
+                .font(.system(size: 70, weight: .medium))
+                .foregroundColor(.white)
+        }
+        .padding(.bottom, 40)
+        
+    }
+}
+
+
